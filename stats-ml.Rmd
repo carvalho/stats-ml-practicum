@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Aidan O'Hara"
 date: "2023-01-24"
 output: html_document
 ---
@@ -15,7 +15,7 @@ library(tidyverse)
 
 **Fork** the [`carvalho/stats-ml-practicum`](https://github.com/carvalho/stats-ml-practicum) repository at GitHub, and
 **create a new branch with your BU login** to store your changes to the document.
-Start by changing the `author`in the YAML header of the document to state **your name**.
+Start by changing the `author`in the YAML header of the document to state **my name: Aidan O'Hara**.
 
 Below we run some analyses and ask questions about them. As you run the code and
 interpret the results within your group, write your answers to the questions following the analyses, but:
@@ -37,7 +37,7 @@ load("stats-ml-canopy.RData")
 (canopy <- as_tibble(canopy))
 
 idx <- order(canopy$distance) # for plots below
-ggplot(canopy, aes(distance, cover)) + geom_point(color = "gray")
+ggplot(canopy, aes(distance, cover)) + geom_point(color = "#CD0BBC")
 ```
 
 As can be seen, there is a clear pattern here: the canopy cover starts high,
@@ -57,15 +57,29 @@ To this end, we explore four approaches below.
 ```{r stats1}
 m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
-  geom_line(aes(distance[idx], fitted(m)[idx]))
+  geom_line(aes(distance[idx], fitted(m)[idx], color = "red"))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
-- Comment on the prediction; does it seem reasonable?
 
+The fit seems good(?). It is under and over estimating at the extremes respectively.  Tail behavior and skew are always hard aspects to correctly model.
+
+```{r}
+plot(m$residuals) + abline(a = 0, b = 0)
+```
+
+Residuals are looking good boss!
+
+- Comment on the prediction; does it seem reasonable?
+```{r}
+predict(object = m, 
+        newdata = data.frame(distance = 0.5),
+        type = 'response',
+        se.fit = T)
+```
 
 ## ML 1: LOESS
 
@@ -79,6 +93,8 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+Loess, or Locally Estimated Scatterplot Smoothing, differs from the above logistic model.  The fit is made using points in a neighborhood around x, weighted by the distances away from the x.  There are numerous options available for manipulating the size and scope of the weighting.
+
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
@@ -98,6 +114,7 @@ Questions and tasks:
 - Check what `randomForest` does; what is **keyword** here?
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+BOOTSTRAP
 
 
 ## Statistics 2: Cubic Fit
