@@ -1,9 +1,11 @@
 ---
 title: "Statistics and ML"
-subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Jiaqi Sun"
 date: "2023-01-24"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+subtitle: MSSP Practicum Discussion
 ---
 
 ```{r setup, include=FALSE}
@@ -64,7 +66,15 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+plot(m,1)
+```
+
+there is a clear pattern over variability, which shouldn't be.
+The average on the mean is around 0, which is good.
+
 - Comment on the prediction; does it seem reasonable?
+
 
 
 ## ML 1: LOESS
@@ -79,8 +89,13 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+loess: Local regression, locally fit a linear function just to the data in this region, fitted by weighted least squares. Very popular way of fitting nonlinear functions.
+
 - Comment on the fit; does it seem reasonable?
+very flexible model
+
 - Comment on the prediction, including the SE.
+
 
 
 ## ML 2: Random Forest
@@ -96,6 +111,7 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
@@ -122,6 +138,11 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+Bootstrap, we quantify the uncertainty.
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
-- How would you incorporate `location` in your analyses? How would you know that
-it is meaningful to use it?
+
+
+- How would you incorporate `location` in your analyses? How would you know that it is meaningful to use it?
+
+
