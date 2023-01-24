@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Yeyang Han"
 date: "2023-01-24"
 output: html_document
 ---
@@ -64,6 +64,18 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
+```{r}
+summary(m)
+```
+the p-value of variables are less, which means they are all usefull at any reasonable level.
+
+```{r}
+residual <- resid(m)
+plot(residual)
+```
+the disperse of residual evenly distributed on both sides of the axis.
+
 - Comment on the prediction; does it seem reasonable?
 
 
