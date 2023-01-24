@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Tong Sun"
 date: "2023-01-24"
 output: html_document
 ---
@@ -64,7 +64,12 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+res <- resid(m)
+plot(fitted(m), res)
+```
 - Comment on the prediction; does it seem reasonable?
+-- It's reasonable.
 
 
 ## ML 1: LOESS
