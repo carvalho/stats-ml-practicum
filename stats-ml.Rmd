@@ -64,6 +64,10 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+plot(m, 1)
+```
+
 - Comment on the prediction; does it seem reasonable?
 
 
