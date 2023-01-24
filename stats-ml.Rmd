@@ -58,14 +58,16 @@ To this end, we explore four approaches below.
 m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
-predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+predict(m, data.frame(distance = 0.5,0.6,0.7,0.8), se = TRUE, type = "response")
+plot(fitted(m), resid(m))
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
-
+## the residual plots shows that the model do not fit well as the residuals do not randomly located around 0.
+## the prediction looks good as it shows small se.
 
 ## ML 1: LOESS
 
@@ -73,12 +75,14 @@ Questions and tasks:
 m <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
-predict(m, data.frame(distance = 0.5), se = TRUE)
+predict(m, data.frame(distance=0.5), se = TRUE)
+plot(fitted(m), resid(m))
 ```
 
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
@@ -91,6 +95,7 @@ m <- randomForest(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+plot(fitted(m), resid(m))
 ```
 
 Questions and tasks:
