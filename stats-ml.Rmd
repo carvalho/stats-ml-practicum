@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "JingjianGao"
 date: "2023-01-24"
 output: html_document
 ---
@@ -58,7 +58,18 @@ To this end, we explore four approaches below.
 m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
+
+# The fit looks amazing. However, there may be overestimating at the beginning, and underestimating at the end. 
+# Since the linear Regression Model/Restrictive model is an approximation, this is tolerable.
+
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+# The prediction is 0.5, meaning the coverage is 50%
+
+res <- resid(m)
+plot(res)
+abline(0,0)
+# It looks normal. There is no clear patterns. 
 ```
 
 Questions and tasks:
@@ -70,10 +81,16 @@ Questions and tasks:
 ## ML 1: LOESS
 
 ```{r ml1}
-m <- loess(cover ~ distance, data = canopy)
+m2 <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
-  geom_line(aes(distance[idx], fitted(m)[idx]))
-predict(m, data.frame(distance = 0.5), se = TRUE)
+  geom_line(aes(distance[idx], fitted(m2)[idx]))
+predict(m2, data.frame(distance = 0.5), se = TRUE)
+
+res2 <- resid(m2)
+plot(res2)
+
+# Loess itself means sediments. But Loess in ML means locally estimated scatterplot smoothing.
+
 ```
 
 Questions and tasks:
