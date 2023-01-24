@@ -9,6 +9,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+renv::restore()
 ```
 
 ## Instructions
@@ -59,12 +60,19 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+#residual plot
+ggplot(m, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+Residuals show a clear pattern, meaning distribution is not normal. Linear fit may not be appropriate.
 - Comment on the prediction; does it seem reasonable?
+No, because residual plot shows a clear pattern.
 
 
 ## ML 1: LOESS
