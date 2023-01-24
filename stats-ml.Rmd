@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Tao Guo"
 date: "2023-01-24"
 output: html_document
 ---
@@ -9,6 +9,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
 ```
 
 ## Instructions
@@ -61,9 +62,14 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 ```
 
+
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+plot(m)
+```
+
 - Comment on the prediction; does it seem reasonable?
 
 
