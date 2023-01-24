@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Hao He"
 date: "2023-01-24"
 output: html_document
 ---
@@ -56,15 +56,22 @@ To this end, we explore four approaches below.
 
 ```{r stats1}
 m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
+# data is actually proportion not binary, so we use quasi
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+par(mfrow = c(2,2))
+plot(m)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
+
+The residuals on average close to zero and seems to have a pattern, so the fit is not very good. The variance if off raise some red flags.
+The prediction seems reasonable but since the residual assumption does not hold, we should be cautious.
 
 
 ## ML 1: LOESS
@@ -74,6 +81,8 @@ m <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+
+
 ```
 
 Questions and tasks:
@@ -82,6 +91,9 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
+loess refers to the local regression. 
+
+The fit is better than the previous linear model as the standard error reduces
 
 ## ML 2: Random Forest
 
@@ -91,6 +103,7 @@ m <- randomForest(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+
 ```
 
 Questions and tasks:
@@ -98,6 +111,8 @@ Questions and tasks:
 - Check what `randomForest` does; what is **keyword** here?
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+
+Use bootstrap to measure the random forest performance.
 
 
 ## Statistics 2: Cubic Fit
