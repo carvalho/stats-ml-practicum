@@ -66,12 +66,14 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
+It do not fit well because it is not equal variance and have pattern. 
 ```{r}
 plot(m)
 ```
 
 - Comment on the prediction; does it seem reasonable?
-
+I think this preduction is not well, it is residual is relatively large. 
 
 ## ML 1: LOESS
 
@@ -85,7 +87,12 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+
+loess is local regression method, which only fit at target point using only the nearby points. 
+
 - Comment on the fit; does it seem reasonable?
+
+
 - Comment on the prediction, including the SE.
 
 
@@ -102,8 +109,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+
 - Comment on the fit; how does it differ from the previous fits?
+
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+we can use bootstrap 
 
 
 ## Statistics 2: Cubic Fit
