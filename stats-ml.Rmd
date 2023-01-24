@@ -68,7 +68,7 @@ Questions and tasks:
 ```{r}
 summary(m)
 ```
-
+the p-value of variables are less, which means they are all usefull at any reasonable level.
 
 ```{r}
 residual <- resid(m)
