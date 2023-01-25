@@ -72,7 +72,7 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 Residuals show a clear pattern, meaning distribution is not normal. Linear fit may not be appropriate.
 - Comment on the prediction; does it seem reasonable?
-No, because residual plot shows a clear pattern.
+Prediction seems reasonable. When distance is 0.5, canopy cover is 0.5. As distance to the city increases, canopy cover decreases, which makes sense because you get closer to civilization.
 
 
 ## ML 1: LOESS
@@ -87,8 +87,13 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+loess function is a machine learning (ML) prediction fit. It uses locals values around a certain point of x and fits the best regression line.
+
 - Comment on the fit; does it seem reasonable?
+It does seems reasonable, very similar in shape to the glm fit.
+
 - Comment on the prediction, including the SE.
+SE of the linear fit is 0.00539. SE of the ML polynomial fit is 0.00438. The SE is lower for the loess fit. This means that variance has decreased.
 
 
 ## ML 2: Random Forest
@@ -104,9 +109,13 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
-- Comment on the fit; how does it differ from the previous fits?
-- Comment on the prediction; how would you obtain a measure of uncertainty?
+randomForest is a library that incorporates Breiman's random forest algorithm for classification and regression. 
 
+- Comment on the fit; how does it differ from the previous fits?
+Only shows the certainty of the model's fit. 0.5, about the same as the same as the previous fits.
+
+- Comment on the prediction; how would you obtain a measure of uncertainty?
+You can use cross validation. Take half the values and use that as a training set and then test on the other half. 
 
 ## Statistics 2: Cubic Fit
 
@@ -115,14 +124,23 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+#residual plot
+ggplot(m, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
 ```
 
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
-- Comment on the prediction and compare it to previous results.
-- How would you know that a cubic fit is good enough?
+Residuals show roughly the same pattern. Fit is very similar to the first model.
 
+- Comment on the prediction and compare it to previous results.
+SE is 0.00625, higher than the others, so variance is also higher.
+
+- How would you know that a cubic fit is good enough?
+SE is close to zero even though it is higher than the others. It seems pretty good.
 
 ## Discussion
 
@@ -130,6 +148,11 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+There are many statistics and test you can do. Cross validation, k-NN, prediction, regression models. However, it is difficult to tell whether predictions are truly reliable.
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+Divide by 4 rule.
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+location is determined by value. 0 represents rural, he closer it is to 1 means it nearing a city.
