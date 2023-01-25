@@ -1,9 +1,11 @@
 ---
 title: "Statistics and ML"
-subtitle: "MSSP Practicum Discussion"
 author: "Jiun Lee"
 date: "2023-01-24"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
+subtitle: MSSP Practicum Discussion
 ---
 
 ```{r setup, include=FALSE}
@@ -36,7 +38,7 @@ canopy cover.
 load("stats-ml-canopy.RData")
 (canopy <- as_tibble(canopy))
 
-idx <- order(canopy$distance) # for plots below
+idx <- order(canopy$distance)
 ggplot(canopy, aes(distance, cover)) + geom_point(color = "gray")
 ```
 
@@ -59,12 +61,20 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+##residual plot
+ggplot(m, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+#The model looks like logistic regression model.
+#There is pattern of the residuals in the plot residuals.
 - Comment on the prediction; does it seem reasonable?
+# prediction look reasonable, because when the distance is 0.5 canopy cover is 0.5. certainty of estimate is to be checked though.
 
 
 ## ML 1: LOESS
@@ -79,8 +89,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+# statistics is built on models( more understanding.) . Machine learning is built on method(making preiction). 
 - Comment on the fit; does it seem reasonable?
+#There is distinct pattern of residuals. The non-linear regression model will be appropriate.
 - Comment on the prediction, including the SE.
+# the certainty of the model is 0.50, which is high, and the standard error is very close to zero. It means the estimation of the model was done precisely.
 
 
 ## ML 2: Random Forest
@@ -96,8 +109,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+#the randomForest do the classification and regression at the same time, and also can be used in unsupervised model.
 - Comment on the fit; how does it differ from the previous fits?
+#It only shows the certainty of fit of the model. It is also about 0.50 like the previous fit.
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+#cross validation: how flexible the curve is. generalizable?/ but measure of uncertainty: what if I don't know the distribution?: boostrap. keep doing again-> make less standard deviation. 
 
 
 ## Statistics 2: Cubic Fit
@@ -112,8 +128,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+#The models look similar, so as the residuals.
 - Comment on the prediction and compare it to previous results.
+# the certainty of the model and standard error are similar, but the residual sum of the model is bigger in this model than the previous model.
 - How would you know that a cubic fit is good enough?
+#The standard error of the model is close to zero, and the certainty of the fit is 0.50. It is good enough.
 
 
 ## Discussion
@@ -122,6 +141,9 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+#From all of the models above, we were able to check the certainty of the model is around 0.50 and standard error is close to zero. The preiction of the data is reliable enough.
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+#By using the-divide-by-4-rule, we can verify that the cover is exactly 50% at the point distance=0.5.
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+# if the distance is 0 it means it's the rural, and if the distance is 1 it means it's urban. We can make the binary location(city=1,rural=0) and use it instead of distance. It will be meaningful to see the contrast between city and rural.
