@@ -102,6 +102,7 @@ Questions and tasks:
 
 ## Statistics 2: Cubic Fit
 1
+22
 ```{r stats2}
 m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
