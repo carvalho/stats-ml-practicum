@@ -64,6 +64,17 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
+```{r}
+plot(m)
+```
+
+```{r}
+res <- resid(m)
+plot(fitted(m), res)
+abline(0,0)
+```
+
 - Comment on the prediction; does it seem reasonable?
 
 
@@ -79,6 +90,8 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+`loess` function is use to fit a polynomial surface determined by one or more numerical predictors, using local fitting.
+
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
@@ -96,6 +109,8 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+`randomForest` implements Breiman's random forest algorithm (based on Breiman and Cutler's original Fortran code) for classification and regression. It can also be used in unsupervised mode for assessing proximities among data points.
+
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
