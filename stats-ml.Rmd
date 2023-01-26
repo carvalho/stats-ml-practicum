@@ -5,7 +5,7 @@ author: "MSSP Practicum II"
 date: "2023-01-24"
 output: html_document
 ---
-
+renv::restore()
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -64,6 +64,7 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
 - Comment on the prediction; does it seem reasonable?
 
 
@@ -80,6 +81,7 @@ Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
 - Comment on the fit; does it seem reasonable?
+The loess model has an increase when the distance is 0.1 from the start point.
 - Comment on the prediction, including the SE.
 
 
@@ -97,6 +99,7 @@ Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
 - Comment on the fit; how does it differ from the previous fits?
+The random forest model is similar with the linear model, but it is not as smooth as the linear model.
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
 
@@ -112,6 +115,7 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+This is very similar with the first linear model. 
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
