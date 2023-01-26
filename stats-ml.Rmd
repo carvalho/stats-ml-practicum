@@ -96,7 +96,10 @@ Questions and tasks:
 Loess, or Locally Estimated Scatterplot Smoothing, differs from the above logistic model.  The fit is made using points in a neighborhood around x, weighted by the distances away from the x.  There are numerous options available for manipulating the size and scope of the weighting.
 
 - Comment on the fit; does it seem reasonable?
+This feet seems somewhat more optimal than the prior fit, it appears to do a better job reconciling the endpoints.  Although the almost endpoints are over/ under estimated.
+
 - Comment on the prediction, including the SE.
+The prediction is accurate, and the standard error is s.t. the predicition will not be off by more than 0.01.
 
 
 ## ML 2: Random Forest
@@ -112,7 +115,10 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+"randomForest implements Breiman's random forest algorithm (based on Breiman and Cutler's original Fortran code) for classification and regression" The keyword here is **random**?
+
 - Comment on the fit; how does it differ from the previous fits?
+This fit is much more wily than the previous. Or maybe wobbly?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 BOOTSTRAP
 
