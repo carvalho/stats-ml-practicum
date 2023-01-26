@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "JingjianGao"
 date: "2023-01-24"
 output: html_document
 ---
@@ -58,7 +58,13 @@ To this end, we explore four approaches below.
 m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
+
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+res <- resid(m)
+plot(res)
+abline(0,0)
+# It looks normal. There is no clear patterns. 
 ```
 
 Questions and tasks:
@@ -66,14 +72,29 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
 
+# The fit looks amazing. However, there may be overestimating at the beginning, and underestimating at the end. 
+# Since the linear Regression Model/Restrictive model is an approximation, this is tolerable.
+
+# The prediction is 0.5, meaning the coverage is 50%
+
+res <- resid(m)
+plot(res)
+abline(0,0)
+# The residual looks normal. There is no clear patterns. 
+
 
 ## ML 1: LOESS
 
 ```{r ml1}
-m <- loess(cover ~ distance, data = canopy)
+m2 <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
-  geom_line(aes(distance[idx], fitted(m)[idx]))
-predict(m, data.frame(distance = 0.5), se = TRUE)
+  geom_line(aes(distance[idx], fitted(m2)[idx]))
+predict(m2, data.frame(distance = 0.5), se = TRUE)
+
+res2 <- resid(m2)
+plot(res2)
+
+
 ```
 
 Questions and tasks:
@@ -82,6 +103,10 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
+- Loess itself means sediments. But Loess in ML means locally estimated scatterplot smoothing.
+- The fit seems reasonable. The left end fits better than the linear fit since, normally, there are competitions between tress in the middle of the jungle. 
+- The right end fit makes sense because there may be people taking care of them.
+- The prediction is similar to the linear fit. The SE is smaller which is better than the linear fit.
 
 ## ML 2: Random Forest
 
@@ -91,6 +116,7 @@ m <- randomForest(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+?randomForest
 ```
 
 Questions and tasks:
@@ -98,6 +124,10 @@ Questions and tasks:
 - Check what `randomForest` does; what is **keyword** here?
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+
+- The randomForest function uses Breiman's random forest algorithm for classification and regression. It may help to extract information for one specific tree.
+- The fit is pretty similar to the previous ones. But it is no longer a smooth curve. It transfers into segments.
+- We can use quantile regression forests method to obtain the measure of uncertainty
 
 
 ## Statistics 2: Cubic Fit
@@ -107,6 +137,9 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+res <- resid(m)
+plot(res)
+abline(0,0)
 ```
 
 Questions and tasks:
@@ -114,6 +147,9 @@ Questions and tasks:
 - Comment on the fit and compare it to the first model; plot and check residuals.
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
+ 
+- The prediction of the fit is similar, the SE is higher. 
+- The cubic fit is good enough when it looks very similar to the linear regression fit
 
 
 ## Discussion
@@ -125,3 +161,11 @@ Elaborate more on the following questions:
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+
+- We would know that the predictions are reliable if the plot/model has a strong correlation. 
+- We can directly use predictions and get that specific point value at dis=0.5
+- Location is gonna be useful when we want to compare the canopy coverage in different locations.
+We will be able to know which location is affected by human society.
+
+
+
