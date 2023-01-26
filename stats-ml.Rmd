@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "chennuo8"
 date: "2023-01-24"
 output: html_document
 ---
@@ -61,10 +61,20 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 ```
 
+
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
+```{r}
+plot(canopy$distance[idx], resid(m)[idx])
+```
+
+The fit demonstrate the overall trends of the canopy cover affected by the distance, so it is good. Although in the residual plot, spots on the upper left and lower right are confined by the range of canopy, they are generally normally distributed. Therefore the fit is good.
+
 - Comment on the prediction; does it seem reasonable?
+
+Yes. From the distribution plot, the canopy cover whose distance was around 0.5 could vary from 0 to 1, so I think 0.5080519 is a reasonable prediction.  
 
 
 ## ML 1: LOESS
@@ -76,12 +86,26 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
 predict(m, data.frame(distance = 0.5), se = TRUE)
 ```
 
+
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+
+For the `loess` function, it fitted a low degree polynomial using weighted least squares for each point, and evaluate the local polynomial to compute each regression point. 
+
+For the previous approach, we use quasibinomial binomial distribution, for which we assumed the link is logit. Therefore, it is a parametric distribution line. However, for LOESS, we don't assume anything, which make it non-parametric and more flexible.
+
 - Comment on the fit; does it seem reasonable?
+
+```{r}
+plot(canopy$distance[idx], resid(m)[idx])
+```
+
+Yes, for the same reason as previous one - the residual plot is generally normally distributed, it seems reasonable. But the on both ends of the fitted line, the predicted value is less extreme - the line rebound after it achieve the minimum or maximum, which make it less reasonable than previous approach. 
+
 - Comment on the prediction, including the SE.
 
+The prediction is reasonable as it is around 0.5. And the SE is smaller than the previous one.
 
 ## ML 2: Random Forest
 
