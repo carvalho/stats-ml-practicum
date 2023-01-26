@@ -1,4 +1,4 @@
---- li lintong
+--- Lintong Li
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
 author: "MSSP Practicum II"
