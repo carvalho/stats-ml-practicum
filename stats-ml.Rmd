@@ -67,6 +67,8 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
 
+The fitted value is 0.5080519 and the residual is 0.343108.
+
 
 ## ML 1: LOESS
 
