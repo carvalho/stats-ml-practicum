@@ -95,14 +95,17 @@ m <- randomForest(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
-plot(fitted(m), resid(m))
+plot(canopy$cover, canopy$cover- m$predicted)
 ```
 
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+it combines the output of multiple decision trees to reach a single result
 - Comment on the fit; how does it differ from the previous fits?
+The residual plot shows an increasing trend of fit and do not randomly located around 0.
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+This prediction do not fit well.
 
 
 ## Statistics 2: Cubic Fit
@@ -112,14 +115,18 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+par(mfrow=c(2,2)) 
+plot(m)
 ```
 
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+  the residual plots are better compare with the first model as it is randomly distribute.
 - Comment on the prediction and compare it to previous results.
+The prediction shows a smaller se.
 - How would you know that a cubic fit is good enough?
-
+Since the se is very small.
 
 ## Discussion
 
@@ -127,6 +134,10 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+##By checking the standard errors and the residual plots of the prediction.
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+##By putting a part of data into test data and another part of the data into training to see if the test data satisfy this situation.
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+## by adding it into the model. We can checl the p-values and residuals plot to see whether adding this variable can help to make a better prediction.
