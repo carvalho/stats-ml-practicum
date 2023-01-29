@@ -74,7 +74,7 @@ there is a clear pattern over variability, which shouldn't be.
 The average on the mean is around 0, which is good.
 
 - Comment on the prediction; does it seem reasonable?
-
+The prediction do seem reasonable as it basically follows the actual data pattern.
 
 
 ## ML 1: LOESS
@@ -92,10 +92,13 @@ Questions and tasks:
 loess: Local regression, locally fit a linear function just to the data in this region, fitted by weighted least squares. Very popular way of fitting nonlinear functions.
 
 - Comment on the fit; does it seem reasonable?
-very flexible model
+```{r}
+m
+```
+the residual standard error is low, gives a much better extrapolation at the boundary and suitable for curve pattern, it seems reasonable.
 
 - Comment on the prediction, including the SE.
-
+based on local regression thus more accurate, the se of fit becomes smaller than linear fit.
 
 
 ## ML 2: Random Forest
@@ -111,10 +114,23 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+Random Forests: 
+Random Forests build lots of bushy trees, and then average them to reduce the variance.
+we build a number of decision trees, each time a split in a tree is considered, a random selection of m predictors is chosen as split candidates from the full set of p predictors. This de-correlates the trees to reduce the variance when averaging the trees.
 
 - Comment on the fit; how does it differ from the previous fits?
-- Comment on the prediction; how would you obtain a measure of uncertainty?
 
+The fit is good. It greatly reduce the error as the variance is reduced. 
+The MSR is very low and 91.91% of the response variable is explained by our predictor, which is great.
+The MSR and % variance explained are based on OOB or _out-of-bag_ estimates, a very clever device in random forests to get honest error estimates.
+```{r}
+m
+```
+
+
+- Comment on the prediction; how would you obtain a measure of uncertainty?
+The prediction do seem reasonable as it basically follows the actual data pattern.
+we can use bootstrap.
 
 ## Statistics 2: Cubic Fit
 
@@ -128,9 +144,18 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
-- Comment on the prediction and compare it to previous results.
-- How would you know that a cubic fit is good enough?
+```{r}
+summary(m)
+plot(m,1)
+```
+there is a clear pattern over variability, which shouldn't be.
+The average on the mean is around 0, which is good.
 
+- Comment on the prediction and compare it to previous results.
+the standard error is bigger than the linear and loess method.
+
+- How would you know that a cubic fit is good enough?
+we see that from the summary statistics, at poly=3, which is cubic fit, it is significant.
 
 ## Discussion
 
@@ -138,11 +163,18 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
-Bootstrap, we quantify the uncertainty.
+we can see from the MSE, R Squared value, P value and F1 score.
 
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
-
+I will use the loess, because local regression gives a much better extrapolation at the boundary and suitable for curve pattern
 
 - How would you incorporate `location` in your analyses? How would you know that it is meaningful to use it?
+use location as a factor in the predicting model.
+see if its p value is significant.
+```{r}
+m <- glm(cover ~ distance + factor(location), data = canopy, family = quasibinomial)
+summary(m)
+```
+
 
 
