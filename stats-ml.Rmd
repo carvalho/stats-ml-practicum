@@ -71,7 +71,7 @@ Questions and tasks:
 - Comment on the prediction; does it seem reasonable?
 
 The residuals on average close to zero and seems to have a pattern, so the fit is not very good. The variance if off raise some red flags.
-The prediction seems reasonable but since the residual assumption does not hold, we should be cautious.
+The prediction seems reasonable but since the residual assumption does not hold, we should be cautious about the prediction results.
 
 
 ## ML 1: LOESS
