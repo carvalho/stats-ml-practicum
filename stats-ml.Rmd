@@ -82,7 +82,8 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
 
-
+par(mfrow = c(2,2))
+plot(m)
 ```
 
 Questions and tasks:
@@ -91,9 +92,9 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
-loess refers to the local regression. 
+LOESS refers to the local regression. 
 
-The fit is better than the previous linear model as the standard error reduces
+The fit is better than the previous linear model as the standard error is slightly smaller.
 
 ## ML 2: Random Forest
 
