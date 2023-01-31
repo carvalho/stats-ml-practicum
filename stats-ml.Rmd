@@ -64,7 +64,12 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+plot(m,1)
+```
+
 - Comment on the prediction; does it seem reasonable?
+Yes, because the red line is straight. But also No because points are not randomly spreading around the line. 
 
 
 ## ML 1: LOESS
@@ -78,10 +83,14 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 
 Questions and tasks:
 
-- Check the definition of the `loess` function; how does it differ from the previous approach?
-- Comment on the fit; does it seem reasonable?
-- Comment on the prediction, including the SE.
+- Check the definition of the `loess` function; how does it differ from the previous approach? 
+It fits simple models to localized subsets of the data to build up a function that describes the deterministic part of the variation in the data, point by point.
 
+- Comment on the fit; does it seem reasonable?
+Yes, because the curve is smooth. 
+
+- Comment on the prediction, including the SE.
+The SE is lower than the linear fit, so we can see the loess model is better fitting than the linear model. 
 
 ## ML 2: Random Forest
 
@@ -96,8 +105,13 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+Ensemble learning method, combines predictions from multiple machine learning algorithms to make a more accurate prediction than a single model.
+
 - Comment on the fit; how does it differ from the previous fits?
+This graph looks like a combination of lines, and each line are a connecting of 2 adjuesting points. The curve is not smooth as the LOESS curve.  
+
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+This prediction is better than the past two. 
 
 
 ## Statistics 2: Cubic Fit
@@ -112,7 +126,14 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+```{r}
+plot(m,1)
+```
+The graph looks same as the first model, and the residual plot looks same as well. 
+
 - Comment on the prediction and compare it to previous results.
+The SE of the cubic model is bigger than the Ramdon Forest model. 
+
 - How would you know that a cubic fit is good enough?
 
 
@@ -122,6 +143,10 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+We can check the wellness of the prediction by the standard error. 
+
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
