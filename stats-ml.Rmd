@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Hao He"
 date: "2023-01-24"
 output: html_document
 ---
@@ -56,15 +56,22 @@ To this end, we explore four approaches below.
 
 ```{r stats1}
 m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
+# data is actually proportion not binary, so we use quasi
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+par(mfrow = c(2,2))
+plot(m)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
+
+The residuals on average are close to zero and seems to have a pattern, so the fit is not very good. The variance if off raise some red flags.
+The prediction seems reasonable as you would expect the canopy cover to be around 50% when the tree line is in the middle but since the residual assumption does not hold, we should be more cautious about the prediction results.
 
 
 ## ML 1: LOESS
@@ -74,6 +81,9 @@ m <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+
+par(mfrow = c(2,2))
+plot(m)
 ```
 
 Questions and tasks:
@@ -82,6 +92,10 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
+LOESS is called local regression because the fitting at say point x is weighted toward the data nearest to x. It is a nonparametric technique that uses local weighted regression to fit a smooth curve through points in a scatter plot. Difference is that LOESS combines much of the simplicity of linear least squares regression with the flexibility of nonlinear regression. 
+
+The fit seems reasonable and there's not too much change from the previous one, except the head and the tail tilt a little which is in agreement with the local weights feature. 
+The prediction looks better than the previous linear model as the standard error is slightly smaller.
 
 ## ML 2: Random Forest
 
@@ -91,6 +105,18 @@ m <- randomForest(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+
+?randomForest
+
+# bootstrap estimates
+# library(boot)
+# boot.fn <- function(data, index)
+#   randomForest(cover ~ distance, data = canopy, subset = index)
+# 
+# set.seed(666)
+# boot.fn(canopy, sample(3000, 3000, replace = T))
+# 
+# boot(canopy,boot.fn, R = 1000)
 ```
 
 Questions and tasks:
@@ -98,6 +124,11 @@ Questions and tasks:
 - Check what `randomForest` does; what is **keyword** here?
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+
+The function randomForest in radomForest package implements Breiman's random forest algorithm (based on Breiman and Cutler's original Fortran code) for classification and regression. The keyword is randomness. In random forests approach, for regression tasks, the mean or average prediction of the individual trees is returned. Random forests builds on the idea of Bootstrap and correct for decision trees' habit of overfitting to their training set. 
+
+The fit seems reasonable and looks different in that the curve consists of different line segments and has a flatter tail overall.
+The prediction is reasonable but higher than all the previous prediction. To assess the variability of the prediction, We can use bootstrap method to measure the random forest performance.
 
 
 ## Statistics 2: Cubic Fit
@@ -107,6 +138,11 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+summary(m)
+
+par(mfrow = c(2,2))
+plot(m)
 ```
 
 Questions and tasks:
@@ -115,6 +151,9 @@ Questions and tasks:
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
+Fit: The mean of residuals is zero with non-constant variance. Since the underlying relationship is not perfect linear based on the initial scatter plot, the cubic fit looks better than the linear fit.
+The prediction looks okay as the cover is exactly 50% at the boundary ( when`distance` = 0.5), but the higher standard error compare to previous results suggests that this cubic model has higher variability than other models.
+By checking the p-value of all terms in the third-order fit, we know that the cubic term is statistically significant. But this could be a result of overfitting. To balance model complexity with the model's explanatory power, we can use AIC or BIC criteria for model selection.
 
 ## Discussion
 
@@ -122,6 +161,14 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+
+We can use test MSE for quantitative variables and test misclassification rate for qualitative variable to measure the prediction error.
+Reliable predictions generally result in lower test MSE/ miscassification rate, given the model is fairly correct.
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
-- How would you incorporate `location` in your analyses? How would you know that
-it is meaningful to use it?
+
+We can use k-fold cross validation or bootstrap sampling. The bootstrap method would be more easier to perform as k-fold may need more iterations and therefore time-consuming.
+
+- How would you incorporate `location` in your analyses? How would you know that it is meaningful to use it?
+
+Because`location` is a factor indicates the place where tree canopy in city was observed, we can add it to the model to assess which part of the city has more/less access to tree resources and planning for tree planting.
