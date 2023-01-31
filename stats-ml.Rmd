@@ -59,6 +59,8 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+resd1 <- resid(m)
+plot(resd1)
 ```
 
 Questions and tasks:
@@ -74,6 +76,8 @@ m <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+resd2 <- resid(m)
+plot(resd2)
 ```
 
 Questions and tasks:
@@ -82,6 +86,7 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
+LOESS uses local regression to fit a smooth curve through a scatterplot of data. It is a nonparametric method which only smoothing a series of data but do not make assumptions about the underlying structure of the data. So as the graph shows, the fitted line is smoother than the previous one, also the residual plot shows that the plots are more concentrated at 0.
 
 ## ML 2: Random Forest
 
@@ -99,6 +104,8 @@ Questions and tasks:
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
+Random Forest construct large amounts of decision trees, and for regression, the random forest returns the mean prediction of the individual decision trees.
+So from the plots above, we can see that the fitted line of the random forest model is not smooth, it's formed by the straight line connections between the value represented by the x axis.
 
 ## Statistics 2: Cubic Fit
 
@@ -107,6 +114,8 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+resd4 <- resid(m)
+plot(resd4)
 ```
 
 Questions and tasks:
@@ -115,6 +124,7 @@ Questions and tasks:
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
+Compare to the first model, the residual plot shows that the residuals are more separate to the 0 abline than the first model. By comparing the SE of different models, we can see that the second model which is LOESS has the lowest standard error 0.004, at the same time, the LOESS model has the lowest residual scale. So this might shows that LOESS model is the most fitted model.
 
 ## Discussion
 
@@ -125,3 +135,5 @@ Elaborate more on the following questions:
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+
+To check if the predictions are reliable, we should check the residuals. For example, for a good linear relationship between the variables, we want to see the residual plots shows that the residuals are showing a horizontal band. If the residuals are in an arch shape, we say that the relationship is not linearly.
