@@ -9,6 +9,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
 ```
 
 ## Instructions
@@ -64,8 +65,9 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+The graph looks as a good fit to data.
 - Comment on the prediction; does it seem reasonable?
-
+The standard error is low and residual.scale is small so it seems reasonable.
 
 ## ML 1: LOESS
 
@@ -79,9 +81,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+Loess function is non-parametric. And it also has a weight parameter.
 - Comment on the fit; does it seem reasonable?
+Yes. The graph looks as a good fit to data.
 - Comment on the prediction, including the SE.
-
+The prediction seems better than the linear regression model since it has lower standard error and residual scale value.
 
 ## ML 2: Random Forest
 
@@ -96,9 +100,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+Predict outcome using decision trees. The keyword is random.
 - Comment on the fit; how does it differ from the previous fits?
+The graph looks as a good fit to data. However, the line seems zigzag instead of a smooth line.
 - Comment on the prediction; how would you obtain a measure of uncertainty?
-
+The predicted value seems higher than the previous two methods.
 
 ## Statistics 2: Cubic Fit
 
@@ -112,9 +118,21 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
-- Comment on the prediction and compare it to previous results.
-- How would you know that a cubic fit is good enough?
+The graph seems similar to the first model.
+```{r}
+residuals <- residuals(m)
+fitted_values <- fitted(m)
+residual_plot_data <- data.frame(Fitted = fitted_values, Residuals = residuals)
+ggplot(residual_plot_data, aes(Fitted, Residuals)) +
+  geom_point(alpha=0.3) +
+  xlab("Fitted Values") +
+  ylab("Residuals")
+```
 
+- Comment on the prediction and compare it to previous results.
+The result seems better than random forest but not the first two models
+- How would you know that a cubic fit is good enough?
+By checking the residual plot.
 
 ## Discussion
 
@@ -122,6 +140,9 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+We can check the model fit by check difference between predicted values vs. actual value.
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+We can setup the null hypothesis test. Specifically, the predicted value of the cover at distance = 0.5 is equal to 50%, and the alternative hypothesis is that the predicted value is not equal to 50%.
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
