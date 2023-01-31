@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Marin Chen"
 date: "2023-01-24"
 output: html_document
 ---
@@ -65,7 +65,11 @@ Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
-
+```{r}
+plot(m)
+```
+The residuals plot show that is not normal distribution.I am not sure it follow the quasibinomial well.
+The prediction looks good, but it looks more accurate in moddle part.
 
 ## ML 1: LOESS
 
@@ -81,8 +85,12 @@ Questions and tasks:
 - Check the definition of the `loess` function; how does it differ from the previous approach?
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
-
-
+```{r}
+?loess
+```
+It used to fit polynomal surface model.
+Form the graph, it is reasonable.
+The prediction looks well, but still have question in the begining and end part.
 ## ML 2: Random Forest
 
 ```{r ml2,message=FALSE}
@@ -125,3 +133,5 @@ Elaborate more on the following questions:
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+We can check the estimate value and test value.If it fit well, we can say that reliable.
+
