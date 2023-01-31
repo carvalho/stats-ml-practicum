@@ -118,7 +118,7 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
-The graph seems similar to the first model.
+The graph seems similar to the first model. However, when we check the residual plot, we can clearly see the vertical pattern as different locations of canopy.
 ```{r}
 residuals <- residuals(m)
 fitted_values <- fitted(m)
@@ -128,6 +128,7 @@ ggplot(residual_plot_data, aes(Fitted, Residuals)) +
   xlab("Fitted Values") +
   ylab("Residuals")
 ```
+
 
 - Comment on the prediction and compare it to previous results.
 The result seems better than random forest but not the first two models
@@ -146,3 +147,19 @@ We can setup the null hypothesis test. Specifically, the predicted value of the 
 
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+I would include the location as leveled categorical predictors. By checking the residual plot, we can see that we have eliminate the vertical pattern by incorporating the `location` variable.
+```{r}
+canopy$location <- as.factor(canopy$location)
+m <- glm(cover ~ distance+location, data = canopy, family = quasibinomial)
+residuals <- residuals(m)
+fitted_values <- fitted(m)
+residual_plot_data <- data.frame(Fitted = fitted_values, Residuals = residuals)
+ggplot(residual_plot_data, aes(Fitted, Residuals)) +
+  geom_point(alpha=0.3) +
+  xlab("Fitted Values") +
+  ylab("Residuals")
+```
+
+
+
+
