@@ -9,6 +9,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+# renv::restore()
+
 
 ```
 
@@ -60,13 +62,18 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+# plot(m)
+# plot(fitted(m),resid(m))
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
-- Comment on the prediction; does it seem reasonable?
+I think the result is relatively reliable. 
 
+- Comment on the prediction; does it seem reasonable?
+I think so. If you look into the original data, we can find that the surrounding data points show that cover sprays around .5. But, the prediction seems to be less significant.
 
 ## ML 1: LOESS
 
@@ -80,6 +87,7 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+loess is 
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
