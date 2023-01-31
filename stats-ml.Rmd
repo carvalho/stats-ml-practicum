@@ -92,6 +92,7 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 ```{r}
+# `loess` function fits a polynomial surface. The fit seems more reasonable since it increased at first then decreased. The SE also decreaed a little than the previous fit.
 
 ```
 
@@ -109,7 +110,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+randomForest implements Breiman's random forest algorithm and used in unsupervised mode for assessing proximities among data points.
+
 - Comment on the fit; how does it differ from the previous fits?
+The fitted line has a sudden drop at the beginning, unlike previous fits.
+
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
 
@@ -135,6 +140,15 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+We say the predictions are reliable when they could explain more variations.
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+Approaches that have fitted lines go through the point(0.5,0.5) would make the test easier to perform.
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+`Location` can be analyzed clearly if we plot the data by groups within `location`. If different groups have different patterns, we could know it's meaningful to analyze cover and distance by locations.
+
+
+
+
