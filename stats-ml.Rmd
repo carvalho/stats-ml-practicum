@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Tao Guo"
 date: "2023-01-24"
 output: html_document
 ---
@@ -9,6 +9,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
 ```
 
 ## Instructions
@@ -37,7 +38,7 @@ load("stats-ml-canopy.RData")
 (canopy <- as_tibble(canopy))
 
 idx <- order(canopy$distance) # for plots below
-ggplot(canopy, aes(distance, cover)) + geom_point(color = "gray")
+ggplot(canopy, aes(distance , cover)) + geom_point(color = "gray")
 ```
 
 As can be seen, there is a clear pattern here: the canopy cover starts high,
@@ -61,11 +62,18 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 ```
 
+
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
-- Comment on the prediction; does it seem reasonable?
 
+It do not fit well because it is not equal variance and have pattern. 
+```{r}
+plot(m)
+```
+
+- Comment on the prediction; does it seem reasonable?
+I think this prediction is not well, it is residual is relatively large. 
 
 ## ML 1: LOESS
 
@@ -79,9 +87,14 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
-- Comment on the fit; does it seem reasonable?
-- Comment on the prediction, including the SE.
 
+loess is local regression method, which only fit at target point using only the nearby points. 
+
+- Comment on the fit; does it seem reasonable?
+In tail of curve, the fit is not well because the cover rate increase, which is not reasonable.
+
+- Comment on the prediction, including the SE.
+At the 0.5 distance, we have 50% to see cover, the se is very small. 
 
 ## ML 2: Random Forest
 
@@ -96,25 +109,40 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+A random forest is a type of machine learning algorithm used for classification and regression tasks. The "random" part of the name refers to the way the algorithm creates multiple decision trees during training, and "forest" refers to the collection of these trees. The keyword in this context refers to the input variable(s) used by the algorithm to make predictions.
 - Comment on the fit; how does it differ from the previous fits?
+This fit is closer to first one, but different to second one. 
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+we can use bootstrap 
 
 
 ## Statistics 2: Cubic Fit
 
 ```{r stats2}
-m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
+m1 <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
-predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+predict(m1, data.frame(distance = 0.5), se = TRUE, type = "response")
+```
+```{r}
+summary(m)
+```
+
+
+```{r}
+summary(m1)
+
+plot(m1,1)
 ```
 
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+These two model is closer to each other, but ploy model is little better than first one because it residuals is smaller. 
 - Comment on the prediction and compare it to previous results.
+this prediction is more closer to 0.5 than previous results.
 - How would you know that a cubic fit is good enough?
-
+From plot of fit line and real data, the fit line follow the pattern of data
 
 ## Discussion
 
@@ -122,6 +150,9 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+In data, at 0.5 distance,  cover also closer to 50% range, prediction is in this range. 
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+I may add location to in my model, I may check the p value to check the meaningfulness. 
