@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "MSSP Practicum II Wang Jingyao"
 date: "2023-01-24"
 output: html_document
 ---
@@ -9,6 +9,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+# Jan 26th
 ```
 
 ## Instructions
@@ -59,12 +60,15 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(m,1)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
+
+The fitted value is 0.5080519 and the residual is 0.343108. The prediction is reasonable, according to the residuals vs Fitted plot, the dot is randomly spread around the red line.
 
 
 ## ML 1: LOESS
