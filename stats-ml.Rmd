@@ -60,10 +60,17 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 ```
+```{r}
+plot(m)
+```
+
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
+Since the residuals are not uniformly and randomly distributed, but there are some patterns, I think the model does not fit very well.
+
 - Comment on the prediction; does it seem reasonable?
 
 
@@ -79,7 +86,17 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+
+loess function is used for fitting a polynomial surface determined by one or more numerical predictors, using local fitting.
+
+In local polynomial regression fitting, when the value of a response variable is to be estimated, a subset of data is first taken from the vicinity of its predictor variable, and then linear or quadratic regression is performed on this subset, and the weighted least squares method is used in the regression.
+
 - Comment on the fit; does it seem reasonable?
+
+```{r}
+plot(m$resid~m$fit)
+```
+
 - Comment on the prediction, including the SE.
 
 
@@ -92,17 +109,28 @@ ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
 ```
-```{r}
-plot(m)
-```
+
 
 
 
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+
+Implements Breiman's random forest algorithm (based on Breiman and Cutler's original Fortran code) for classification and regression. It can also be used in unsupervised mode for assessing proximities among data points.
+
 - Comment on the fit; how does it differ from the previous fits?
+
+```{r}
+plot(m)
+```
+The model is predicted with high accuracy, with no need for further tuning. 
+
+Its avoids overfitting.
+
 - Comment on the prediction; how would you obtain a measure of uncertainty?
+
+
 
 
 ## Statistics 2: Cubic Fit
@@ -117,9 +145,15 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+
+```{r}
+plot(m)
+```
+
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
+Assuming the model you fit to the data is correct, the residuals approximate the random errors. Therefore, if the residuals appear to behave randomly, it suggests that the model fits the data well. However, if the residuals display a systematic pattern, it is a clear sign that the model fits the data poorly.
 
 ## Discussion
 
