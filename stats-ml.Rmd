@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Hanzhang Song"
 date: "2023-01-24"
 output: html_document
 ---
@@ -28,8 +28,8 @@ interpret the results within your group, write your answers to the questions fol
 In this project we study **tree canopy cover** as it varies with the
 **relative distance** to a tree line boundary in urban forests. The dataset in
 `stats-ml-canopy.RData` has three variables: `location` for the urban forest
-where the canopy cover was observed, `distance` for the relative distance &mdash;
-zero is inside the forest and one is outside (city) &mdash; and `cover` for the
+where the canopy cover was observed, `distance` for the relative distance & mdash;
+zero is inside the forest and one is outside (city) & mdash; and `cover` for the
 canopy cover.
 
 ```{r}
@@ -64,7 +64,17 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+# Logistic regression(Quasi binomial). The canopy cover decreases 
+# by 0.508 units as distance increases by 1 unit each.
+res <- resid(m)
+plot(fitted(m),res)
+abline(0,0)
+# It seems that there is no pattern in residuals.
+```
+
 - Comment on the prediction; does it seem reasonable?
+
 
 
 ## ML 1: LOESS
@@ -81,6 +91,10 @@ Questions and tasks:
 - Check the definition of the `loess` function; how does it differ from the previous approach?
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
+```{r}
+# `loess` function fits a polynomial surface. The fit seems more reasonable since it increased at first then decreased. The SE also decreaed a little than the previous fit.
+
+```
 
 
 ## ML 2: Random Forest
@@ -96,7 +110,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+randomForest implements Breiman's random forest algorithm and used in unsupervised mode for assessing proximities among data points.
+
 - Comment on the fit; how does it differ from the previous fits?
+The fitted line has a sudden drop at the beginning, unlike previous fits.
+
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
 
@@ -122,6 +140,15 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+We say the predictions are reliable when they could explain more variations.
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+Approaches that have fitted lines go through the point(0.5,0.5) would make the test easier to perform.
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+`Location` can be analyzed clearly if we plot the data by groups within `location`. If different groups have different patterns, we could know it's meaningful to analyze cover and distance by locations.
+
+
+
+
