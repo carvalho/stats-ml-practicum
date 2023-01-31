@@ -1,8 +1,8 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
-date: "2023-01-24"
+author: "Hsueh-Pin Liu"
+date: "2023-01-30"
 output: html_document
 ---
 
@@ -59,12 +59,17 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(m)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
+
+Though the fit is not correct, it still gives a brief figure of the model.
+The fit is close to 0.5, so it seems reasonable, but remain to be proved.
+
 
 
 ## ML 1: LOESS
@@ -81,6 +86,10 @@ Questions and tasks:
 - Check the definition of the `loess` function; how does it differ from the previous approach?
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
+
+It divides the data into several small parts, repeating this process and finally get the result.
+The curve looks like the previous one, but for both tails, it seems a bit unreasonable because when you are in the forest, the cover should be one and when you are away from the forest, it should be 0.
+The fit is still at about 50%, and the SE is a bit smaller than the previous one, so the model has a better result.
 
 
 ## ML 2: Random Forest
@@ -99,6 +108,9 @@ Questions and tasks:
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
+It randomly selects data and make groups for them,so normally it gets a higher accuracy and can deal with a large dataset.
+Obviously the line is not a curve anymore, but a combination of many lines.
+The prediction is quite different from the previous two. First I should identify the sources of uncertainty in the measurement,then estimate the size, finally they are combined to give an overall figure.
 
 ## Statistics 2: Cubic Fit
 
@@ -107,6 +119,7 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(m)
 ```
 
 Questions and tasks:
@@ -114,6 +127,11 @@ Questions and tasks:
 - Comment on the fit and compare it to the first model; plot and check residuals.
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
+
+It seems similar as the first one, but it's actually more fit.
+The prediction is back to about 50%.
+When the residuals are relatively small.
+
 
 
 ## Discussion
@@ -125,3 +143,7 @@ Elaborate more on the following questions:
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+
+After checking the models, plot and residuals, if it shows small residuals and reasonable results, it's reliable.
+By using distance=0.5 in the model and find out results.
+Location actually help us group up all the data, we can use methods of resampling to better check whether the model fits.
