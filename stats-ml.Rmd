@@ -64,7 +64,15 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+```{r}
+plot(m, 1)
+```
+
 - Comment on the prediction; does it seem reasonable?
+##The residuals are evenly distributed around two sides of 0, so the plot is reasonable, these data set has obvious linear relation. It's resonable since the residuals become smaller along with distance grow.
+
+
+
 
 
 ## ML 1: LOESS
@@ -79,7 +87,9 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+##LOESES fit a polynomial surface determined by one or more numerical predictors, using local fitting. The `loses` only fit local data.
 - Comment on the fit; does it seem reasonable?
+##It seems resonable since inside the forest the canopy cover approach to 100% and decede among the tree line near the city
 - Comment on the prediction, including the SE.
 
 
@@ -96,9 +106,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+##Random forests build prediction models by sampling objects and variables, that is, generating multiple decision trees and classifying objects in turn. Finally, the classification results of each decision tree were summarized, and the mode category in all predicted categories was the category of the object predicted by random forest, and the classification accuracy was improved.
 - Comment on the fit; how does it differ from the previous fits?
+##It fit well, however the trend become segmented. Because of the large sample size of the data, the number of nodes should be greater than four, so as to better take into account the smoothness of the fitted line and avoid over-fitting
 - Comment on the prediction; how would you obtain a measure of uncertainty?
-
+##It seems fit more precisly, since we verge the range to 0.5
 
 ## Statistics 2: Cubic Fit
 
@@ -107,14 +119,16 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(m,1)
 ```
 
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+##The cubic fit not  suitable for this samplet, because the sample size is 3000 which is bigger than 100, so the node number should be more than 4. And the residual plot is quite similar to the linear regression model.
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
-
+##when the p-value smaller than 0.05 it seems that the model fit well enough.
 
 ## Discussion
 
@@ -122,6 +136,9 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+##Depends on the residual plots
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+##I think the randomforset is easier to perform.
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+##
