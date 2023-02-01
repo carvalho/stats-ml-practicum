@@ -12,7 +12,7 @@ library(tidyverse)
 
 ```
 
-## Instructions
+## Instructions 
 
 **Fork** the [`carvalho/stats-ml-practicum`](https://github.com/carvalho/stats-ml-practicum) repository at GitHub, and
 **create a new branch with your BU login** to store your changes to the document.
