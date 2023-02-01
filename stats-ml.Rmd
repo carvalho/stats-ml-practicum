@@ -1,4 +1,4 @@
----
+--- Lintong Li
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
 author: "MSSP Practicum II"
@@ -59,13 +59,19 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+par(mfrow=c(2,2)) 
+plot(m)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+
 - Comment on the prediction; does it seem reasonable?
 
+My answers:
+-The model seems not good to fit, since the residuals plot shows a pattern.
+-The prediction seems reasonable, since the canopy cover is expected to be around 50% when distance equal to 0.5.
 
 ## ML 1: LOESS
 
@@ -79,9 +85,16 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+Loess regression is a nonparametric technique that uses local weighted regression to fit a smooth curve through points in a scatter plot.
+
 - Comment on the fit; does it seem reasonable?
+
 - Comment on the prediction, including the SE.
 
+My answers:
+-The difference between loess and glm is that loess is a non-parametric method that fits a smooth curve to the data, while glm is a parametric method that fits a linear model to the data.
+-The fit seems not reasonable according to the head and tail part.
+-The prediction looks better than the previous fit, since SE is smaller.
 
 ## ML 2: Random Forest
 
@@ -96,9 +109,17 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
+
 - Comment on the fit; how does it differ from the previous fits?
+
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
+My answers:
+-"randomForest" is an implementation of the random forest algorithm in R, a machine learning method used for classification and regression. The random forest algorithm builds multiple decision trees and aggregates their predictions to produce a final prediction.
+-The fit seems reasonable, but it looks very rugged not very smooth line.
+-The prediction seems reasonbale but higher than two previous fits.
+
+The keyword here is "ensemble learning".
 
 ## Statistics 2: Cubic Fit
 
@@ -107,6 +128,8 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+par(mfrow=c(2,2)) 
+plot(m)
 ```
 
 Questions and tasks:
@@ -115,6 +138,11 @@ Questions and tasks:
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
+ My answer:
+-It seems fit better, since the residual is smaller
+-THe prediction looks good, since cover is 50% when distance equal to 0.5, but higher SE compared with previous results
+-By checking R-square, RSE, p-value...
+ 
 
 ## Discussion
 
@@ -122,6 +150,8 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+By checking cross-validation and residual plots.
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
-- How would you incorporate `location` in your analyses? How would you know that
-it is meaningful to use it?
+By hypothesis test, we can assume that distance=0.5 using p value to decide whether it should be rejected or not.
+- How would you incorporate `location` in your analyses? How would you know that it is meaningful to use it?
+By fitting model with "location" variable, check p-value, R-square and other important value to determine.
