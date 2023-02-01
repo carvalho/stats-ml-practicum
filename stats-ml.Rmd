@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Ziyang Lin"
 date: "2023-01-24"
 output: html_document
 ---
@@ -26,7 +26,7 @@ interpret the results within your group, write your answers to the questions fol
 ## Introduction
 
 In this project we study **tree canopy cover** as it varies with the
-**relative distance** to a tree line boundary in urban forests. The dataset in
+**relative distance** to a tree line boundary in urban forests. The dataset inqa[p-=]
 `stats-ml-canopy.RData` has three variables: `location` for the urban forest
 where the canopy cover was observed, `distance` for the relative distance &mdash;
 zero is inside the forest and one is outside (city) &mdash; and `cover` for the
@@ -59,6 +59,7 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(fitted(m),resid(m))
 ```
 
 Questions and tasks:
@@ -66,6 +67,7 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
 
+The linear fit follows the trend of the relationship and it is the commonly used prediction since it is simple and easy to understand. Residuals has a clear patterns, not tend to cluster towards the middle, however, it shows some outliers. So it's not ideal.
 
 ## ML 1: LOESS
 
@@ -74,6 +76,7 @@ m <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+
 ```
 
 Questions and tasks:
@@ -82,6 +85,8 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
+Loess combines simplicity of linear regression with flexibility of nonlinear regression by fitting models to localized subsets of data to build up a function which describes the deterministic part of the variation in the data.
+The fit and prediction are more accurate which is more reasonable.
 
 ## ML 2: Random Forest
 
@@ -99,6 +104,8 @@ Questions and tasks:
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
+RandomForest can be used for classification and regression. It can avoid overfitting. Keyword is random here.
+Difference is this plot is not that smooth.
 
 ## Statistics 2: Cubic Fit
 
@@ -107,6 +114,7 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(fitted(m),resid(m))
 ```
 
 Questions and tasks:
@@ -116,12 +124,16 @@ Questions and tasks:
 - How would you know that a cubic fit is good enough?
 
 
+This fit helps to understand true underlying relationship. The fit looks similar but not linear which indicates it might be better for the real prediction. It's not good enough as the residual is not ideal.
+
 ## Discussion
 
 Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
-- How would you know that the predictions are *reliable*?
+- How would you know that the predictions are *rel iable*?
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+
+We can get information from the predicted value, also we could check the fit plot to see if they correspond to each other.
