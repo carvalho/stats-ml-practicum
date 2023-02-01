@@ -59,14 +59,15 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+summary(m)
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
+The p value less than 0.05, the model fit the data well. Long Tail Distribution
 - Comment on the prediction; does it seem reasonable?
-
-
+From the plot, the value should be 0.05, so it's not reasonable.
 ## ML 1: LOESS
 
 ```{r ml1}
@@ -79,9 +80,15 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
-- Comment on the fit; does it seem reasonable?
-- Comment on the prediction, including the SE.
+Loess regression is a nonparametric technique that uses local weighted regression to fit a smooth curve through points in a scatter plot.
 
+if relationship between variables is linear should use glm,If the relationship were nonlinear but smooth, you could use loess. The loess method is based on locally linear smoothing and can handle outliers.
+
+- Comment on the fit; does it seem reasonable?
+I don't think it fit
+
+- Comment on the prediction, including the SE.
+The value of prediction near to 0.5.
 
 ## ML 2: Random Forest
 
@@ -96,9 +103,14 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check what `randomForest` does; what is **keyword** here?
-- Comment on the fit; how does it differ from the previous fits?
-- Comment on the prediction; how would you obtain a measure of uncertainty?
+Random Forest is a powerful and versatile supervised machine learning algorithm that grows and combines multiple decision trees to create a “forest.”It builds decision trees on different samples and takes their majority vote for classification and average in case of regression.
 
+
+- Comment on the fit; how does it differ from the previous fits?
+I don't think it fits well, when the distance is 1, the value of cover is not 1,but when it depart from distance 1, the value of cover near to 1
+
+- Comment on the prediction; how would you obtain a measure of uncertainty?
+The value is 0.53, larger than 0.5, so it is not reasonable.
 
 ## Statistics 2: Cubic Fit
 
@@ -112,9 +124,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
+ I think the model fit the data well.
 - Comment on the prediction and compare it to previous results.
+the value is very near to the 0.5, so it's good
 - How would you know that a cubic fit is good enough?
-
+From residual plot and QQplot. 
 
 ## Discussion
 
@@ -122,6 +136,13 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+I compare them to 0.5 because it is when distance is 0.5 that cover should be 0.5
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+I think we can test the model from residualvs fitted plot, QQplot, residual vs leverage and scale-location plot.
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+
+I think location could be used for classify the group, find differences between groups and then fit model to get predictions in each group.
+
