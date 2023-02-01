@@ -59,7 +59,6 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
-
 plot(m)
 ```
 
@@ -68,6 +67,9 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
 
+Answers:
+- According to the residuals plot, the residuals are around 0, which means the model fits well; the second plot shows that the residuals should be normally distributed.
+- The standard error of the prediction shows that the prediction accuracy is good
 
 ## ML 1: LOESS
 
@@ -76,6 +78,7 @@ m <- loess(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+
 ```
 
 Questions and tasks:
@@ -84,6 +87,10 @@ Questions and tasks:
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
 
+Answers:
+- The loess function is a method for fitting a smooth curve to a scatterplot. It helps to remove the noise from the data.
+- The fit is inappropriate in the head and tail part, according to the fitting plot.
+- The SE of the prediction shows that it's more accurate than the linear fit model above
 
 ## ML 2: Random Forest
 
@@ -93,6 +100,7 @@ m <- randomForest(cover ~ distance, data = canopy)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], predict(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE)
+plot(m)
 ```
 
 Questions and tasks:
@@ -101,6 +109,10 @@ Questions and tasks:
 - Comment on the fit; how does it differ from the previous fits?
 - Comment on the prediction; how would you obtain a measure of uncertainty?
 
+Answers
+- `randomForest` s based on the concept of decision trees.Each decision tree in the forest is created using a random subset of the training data, and the prediction is made by combining the results from each tree. The final prediction is based on a majority vote or an average of the results from each tree.
+- This fit model  overcome overfitting and bias.It provides a robust model that can handle complex data distributions and also improve accuracy by reducing variance in the predictions.
+- The plot shows that the estimated error become stable when the "trees" grow bigger. The plot also shows that the model performs well in prediction since the error is small.
 
 ## Statistics 2: Cubic Fit
 
@@ -109,14 +121,20 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+plot(m)
 ```
 
 Questions and tasks:
-
 - Comment on the fit and compare it to the first model; plot and check residuals.
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
+Answers:
+- The residual plot shows that the residuals are around 0, there is linear relationship between predictors and response.
+The second plot shows that the residuals are normally distributed.1
+- This prediction is even better than the models above, the standard error is relatively small.
+- Can evaluate according to R square, RMSE and so on.
 
 ## Discussion
 
@@ -124,6 +142,8 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+Answer: Base on the accuracy, confidence interval, robustness and so on
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
