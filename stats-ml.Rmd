@@ -67,7 +67,7 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
 
-The linear fit follows the trend of the relationship. Residuals has a clear patterns and not tend to cluster towards the middle so it's not ideal, same as the prediction.
+The linear fit follows the trend of the relationship and it is the commonly used prediction since it is simple and easy to understand. Residuals has a clear patterns, not tend to cluster towards the middle, however, it shows some outliers. So it's not ideal.
 
 ## ML 1: LOESS
 
@@ -86,7 +86,7 @@ Questions and tasks:
 - Comment on the prediction, including the SE.
 
 Loess combines simplicity of linear regression with flexibility of nonlinear regression by fitting models to localized subsets of data to build up a function which describes the deterministic part of the variation in the data.
-The fit is similar as the linear fit, the only difference is a small turnover at the start and end.
+The fit and prediction are more accurate which is more reasonable.
 
 ## ML 2: Random Forest
 
@@ -123,7 +123,8 @@ Questions and tasks:
 - Comment on the prediction and compare it to previous results.
 - How would you know that a cubic fit is good enough?
 
-The fit and residual plots looks similar. The prediction value are close too. It's not good enough as the residual is not ideal.
+
+This fit helps to understand true underlying relationship. The fit looks similar but not linear which indicates it might be better for the real prediction. It's not good enough as the residual is not ideal.
 
 ## Discussion
 
