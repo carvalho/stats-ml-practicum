@@ -126,3 +126,4 @@ Elaborate more on the following questions:
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+12233
