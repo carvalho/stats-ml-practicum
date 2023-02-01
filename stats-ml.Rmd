@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "Zhi Tu"
 date: "2023-01-24"
 output: html_document
 ---
