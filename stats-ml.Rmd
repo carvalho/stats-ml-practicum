@@ -124,10 +124,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
-
+ I think the model fit the data well.
 - Comment on the prediction and compare it to previous results.
+the value is very near to the 0.5, so it's good
 - How would you know that a cubic fit is good enough?
-
+From residual plot and QQplot. 
 
 ## Discussion
 
@@ -135,6 +136,13 @@ Let's try to connect all lessons learned from your work and the discussions.
 Elaborate more on the following questions:
 
 - How would you know that the predictions are *reliable*?
+I compare them to 0.5 because it is when distance is 0.5 that cover should be 0.5
+
 - How would you test that the cover is exactly 50% at the boundary (`distance` = 0.5)? Which approaches would make the test easier to perform?
+I think we can test the model from residualvs fitted plot, QQplot, residual vs leverage and scale-location plot.
+
 - How would you incorporate `location` in your analyses? How would you know that
 it is meaningful to use it?
+
+I think location could be used for classify the group, find differences between groups and then fit model to get predictions in each group.
+
