@@ -1,7 +1,7 @@
 ---
 title: "Statistics and ML"
 subtitle: "MSSP Practicum Discussion"
-author: "MSSP Practicum II"
+author: "xiaoyanbin Cai"
 date: "2023-01-24"
 output: html_document
 ---
@@ -66,6 +66,15 @@ Questions and tasks:
 - Comment on the fit, plot residuals and comment on them.
 - Comment on the prediction; does it seem reasonable?
 
+```{r}
+#Comment on the fit, plot residuals and comment on them.
+res <- resid(m)
+plot(fitted(m), res)
+abline(0,0)
+#Comment on the prediction; does it seem reasonable?
+'I think prediction is reasonbale since residual is close to zero.'
+```
+
 
 ## ML 1: LOESS
 
@@ -81,6 +90,10 @@ Questions and tasks:
 - Check the definition of the `loess` function; how does it differ from the previous approach?
 - Comment on the fit; does it seem reasonable?
 - Comment on the prediction, including the SE.
+
+```{r}
+
+```
 
 
 ## ML 2: Random Forest
