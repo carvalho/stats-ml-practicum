@@ -9,6 +9,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+# renv::restore()
+
+
 ```
 
 ## Instructions
@@ -59,13 +62,18 @@ m <- glm(cover ~ distance, data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+
+# plot(m)
+# plot(fitted(m),resid(m))
 ```
 
 Questions and tasks:
 
 - Comment on the fit, plot residuals and comment on them.
-- Comment on the prediction; does it seem reasonable?
+I think the result is relatively reliable. 
 
+- Comment on the prediction; does it seem reasonable?
+I think so. If you look into the original data, we can find that the surrounding data points show that cover sprays around .5. But, the prediction seems to be less significant.
 
 ## ML 1: LOESS
 
@@ -79,8 +87,11 @@ predict(m, data.frame(distance = 0.5), se = TRUE)
 Questions and tasks:
 
 - Check the definition of the `loess` function; how does it differ from the previous approach?
+loess uses moving average to fit a best curve(non-linear for most of the time), which means the input values are weighted.
 - Comment on the fit; does it seem reasonable?
+Not likely, the left tail and right tail is kind of weird, since the slope may not change that much.
 - Comment on the prediction, including the SE.
+The prediction is sound and the se is acceptable.
 
 
 ## ML 2: Random Forest
@@ -107,13 +118,17 @@ m <- glm(cover ~ poly(distance, 3), data = canopy, family = quasibinomial)
 ggplot(canopy, aes(distance, cover)) + geom_point(col = "gray") +
   geom_line(aes(distance[idx], fitted(m)[idx]))
 predict(m, data.frame(distance = 0.5), se = TRUE, type = "response")
+plot(m)
+# plot(fitted(m),resid(m))
 ```
 
 Questions and tasks:
 
 - Comment on the fit and compare it to the first model; plot and check residuals.
 - Comment on the prediction and compare it to previous results.
+It has the most closest value to .5
 - How would you know that a cubic fit is good enough?
+with a low Root-mean-square deviation
 
 
 ## Discussion
